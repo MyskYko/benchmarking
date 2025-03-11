@@ -1,0 +1,8 @@
+{
+    "extension": "aig",
+    "benchmarks": {
+        "exclude": [
+            "EPFL/best_results"
+        ]
+    }
+}
