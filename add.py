@@ -10,15 +10,13 @@ import json
 import pandas
 
 def add():
-    identifier = datetime.datetime.now().strftime('%Y%m%d%H%M%S_%f')
-    apath = os.path.join('results', identifier)
+    apath = os.path.join('results', add.tag)
+    if os.path.exists(apath):
+        print('Error: tag', add.tag, 'already exists')
+        sys.exit(1)
     os.mkdir(apath)
-    rpath = os.path.join(apath, 'command.txt')
-    with open(rpath, 'w') as f:
+    with open(os.path.join(apath, 'command.txt'), 'w') as f:
         f.write(' '.join(add.command))
-    with open(os.path.join('results', 'tag.csv'), 'a') as f:
-        f.write(','.join([identifier, add.tag]))
-        f.write('\n')
     bpath = os.path.abspath('.')
     def run(inpath):
         print(inpath)
@@ -82,14 +80,5 @@ if __name__ == '__main__':
     else:
         add.command = [args.command]
     add.tag = args.tag
-    try:
-        df = pandas.read_csv(os.path.join('results', 'tag.csv'), names=['id', 'key'], index_col='key')
-        if add.tag in df.index:
-            print('Error: tag', add.tag, 'already exists')
-            sys.exit(1)
-    except FileNotFoundError:
-        pass
-    except pandas.errors.EmptyDataError:
-        pass
     add()
     
