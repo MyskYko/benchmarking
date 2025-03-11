@@ -1,5 +1,7 @@
 {
     "extension": "aig",
+    "test": "C17.blif.aig",
+    "output_name": "out.aig",
     "benchmarks": {
         "exclude": [
             "EPFL/best_results"
