@@ -9,6 +9,8 @@ import argparse
 import json
 import pandas
 
+import evaluate
+
 def add():
     apath = os.path.join('results', add.tag)
     if os.path.exists(apath):
@@ -30,6 +32,12 @@ def add():
                 f.write(result.stderr)
             with open('time.txt', 'w') as f:
                 f.write(str(elapsed_time))
+            if not os.path.isfile(add.output):
+                print('Error: output does not exist')
+                sys.exist(1)
+            stats = evaluate.evaluate(add.output)
+            stats['time'] = elapsed_time
+            return stats
         except subprocess.CalledProcessError as e:
             print('Error: command failed with exit code', e.returncode)
             print('stdout:', e.stdout)
@@ -45,6 +53,7 @@ def add():
         with contextlib.chdir(cpath):
             inpath = os.path.join(bpath, add.test)
             run(inpath)
+    data = []
     def traverse(path = '', index = add.index):
         path = os.path.join(path, index['name'])
         cpath = os.path.join(apath, path)
@@ -55,10 +64,16 @@ def add():
             os.mkdir(cpath)
             with contextlib.chdir(cpath):
                 inpath = os.path.join(bpath, path, name)
-                run(inpath)
+                stats = run(inpath)
+                stats['path'] = path
+                stats['name'] = basename
+                data.append(stats)
         for subindex in index['dirs']:
             traverse(path=path, index=subindex)
     traverse()
+    df = pandas.DataFrame(data)
+    df.to_csv(os.path.join(apath, 'data.csv'))
+add.output = None
 add.test = None
 add.index = {}
 add.command = []
@@ -68,12 +83,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('command', type=str)
     parser.add_argument('-t', '--tag', type=str, required=True)
+    args = parser.parse_args()
     with open('settings.json', 'r') as f:
         settings = json.load(f)
+        add.output = settings['output']
         add.test = settings['test']
     with open('index.json', 'r') as f:
         add.index = json.load(f)
-    args = parser.parse_args()
     if args.command.startswith('.'):
         commands = args.command.split()
         add.command = [os.path.abspath(commands[0])] + commands[1:]
