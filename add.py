@@ -32,10 +32,7 @@ def add():
                 f.write(result.stderr)
             with open('time.txt', 'w') as f:
                 f.write(str(elapsed_time))
-            if not os.path.isfile(add.output):
-                print('Error: output does not exist')
-                sys.exist(1)
-            stats = evaluate.evaluate(add.output)
+            stats = evaluate.evaluate()
             stats['time'] = elapsed_time
             return stats
         except subprocess.CalledProcessError as e:
@@ -73,7 +70,6 @@ def add():
     traverse()
     df = pandas.DataFrame(data)
     df.to_csv(os.path.join(apath, 'data.csv'))
-add.output = None
 add.test = None
 add.index = {}
 add.command = []
@@ -86,7 +82,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open('settings.json', 'r') as f:
         settings = json.load(f)
-        add.output = settings['output']
         add.test = settings['test']
     with open('index.json', 'r') as f:
         add.index = json.load(f)

@@ -1,10 +1,11 @@
-import pyaig
+import os
 import array
 import argparse
+import pyaig
 
-def evaluate(path):
+def evaluate(path = ''):
     stats = {}
-    aig = pyaig.read_aiger(path)
+    aig = pyaig.read_aiger(os.path.join(path, 'out.aig'))
     stats['size'] = aig.n_ands()
     def get_level():
         a = array.array('i', (-1 for _ in range(len(aig))))
@@ -18,6 +19,11 @@ def evaluate(path):
                 a[i] = 0
         return max(a)
     stats['level'] = get_level()
+    with open(os.path.join(path, 'stdout.txt')) as f:
+        for line in f:
+            if line.startswith('#'):
+                words = line[1:].split(':')
+                stats[words[0].strip()] = words[1].strip()
     return stats
 
 if __name__ == '__main__':
