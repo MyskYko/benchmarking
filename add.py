@@ -62,13 +62,12 @@ def add():
             with contextlib.chdir(cpath):
                 inpath = os.path.join(bpath, path, name)
                 stats = run(inpath)
-                stats['path'] = path
-                stats['name'] = basename
+                stats['path'] = os.path.join(path, basename)
                 data.append(stats)
         for subindex in index['dirs']:
             traverse(path=path, index=subindex)
     traverse()
-    df = pandas.DataFrame(data)
+    df = pandas.DataFrame(data).set_index('path').sort_index()
     df.to_csv(os.path.join(apath, 'data.csv'))
 add.test = None
 add.index = {}
