@@ -3,7 +3,14 @@
     "test": "C17.blif.aig",
     "benchmarks": {
         "exclude": [
-            "EPFL/best_results"
+            "EPFL/best_results",
+            "EPFL/arithmetic/hyp",
+            "EPFL/random_control/mem_ctrl"
         ]
-    }
+    },
+    "integer_metrics": [
+        "size",
+        "level",
+        "iteration"
+    ]
 }

@@ -10,7 +10,8 @@ def gen_index(path = 'benchmarks'):
         for entry in it:
             if entry.name.startswith('.'):
                 continue
-            if entry.path in gen_index.exclude:
+            basename, _ = os.path.splitext(entry.path)
+            if basename in gen_index.exclude:
                 continue
             if entry.is_dir():
                 data['dirs'].append(gen_index(entry.path))
