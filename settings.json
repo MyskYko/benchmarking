@@ -4,8 +4,7 @@
     "benchmarks": {
         "exclude": [
             "EPFL/best_results",
-            "EPFL/arithmetic/hyp",
-            "EPFL/random_control/mem_ctrl"
+            "EPFL/arithmetic/hyp"
         ]
     },
     "integer_metrics": [

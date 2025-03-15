@@ -48,8 +48,9 @@ def create_table(path = 'results'):
     #print(df.columns.levels[0])
     #print(df['size'])
     #print(df['time'].astype(float).map(lambda x: '{0:.4f}'.format(x)))
-    df = pandas.concat([df['size'], df['time'].astype(float).map(lambda x: '{0:.2f}'.format(x)), df['iteration']], keys=['size', 'time', 'iteration'])
     print(df)
+    print(pandas.concat([df['size'], df['time'].astype(float).map(lambda x: '{0:.2f}'.format(x))], keys=['size', 'time'], axis=1))
+    print(pandas.concat([df['size'], df['time'].astype(float).map(lambda x: '{0:.2f}'.format(x)), df['iteration']], keys=['size', 'time', 'iteration'], axis=1))
 create_table.benchmarks_exclude = []
 create_table.integer_metrics = []
 create_table.use_name = True
