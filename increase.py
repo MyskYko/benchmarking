@@ -17,7 +17,7 @@ def increase():
         print('Error: tag', increase.tag, 'does not exist')
         sys.exit(1)
     with open(os.path.join(apath, 'command.txt'), 'r') as f:
-        command = f.readline()
+        command = f.readline().strip()
         print(command)
     bpath = os.path.abspath('.')
     def run(inpath):

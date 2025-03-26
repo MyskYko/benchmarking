@@ -36,7 +36,8 @@ def create_table(path = 'results'):
             gmeans[col] = numpy.exp(numpy.log(df[col]).mean())
         gmean_df = pandas.DataFrame([gmeans], index=['gmean']).map(lambda x: '{0:.2f}'.format(x))
         for metric in create_table.integer_metrics:
-            df[metric] = df[metric].map(lambda x: '{0:.0f}'.format(x))
+            if metric in df:
+                df[metric] = df[metric].map(lambda x: '{0:.0f}'.format(x))
         df = pandas.concat([df, gmean_df])
     else:
         for metric in create_table.integer_metrics:
